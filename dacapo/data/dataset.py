@@ -1,4 +1,7 @@
+from gunpowder import ArrayKey, GraphKey
+
 from abc import ABC, abstractmethod
+from typing import Union
 
 
 class ArrayDataset(ABC):
@@ -14,61 +17,22 @@ class ArrayDataset(ABC):
 
     @property
     @abstractmethod
-    def voxel_size(self):
-        pass
-
-    @property
-    @abstractmethod
-    def spatial_dims(self):
-        pass
-
-    @property
-    @abstractmethod
-    def offset(self):
-        pass
-
-    @property
-    @abstractmethod
-    def shape(self):
-        pass
-
-    @property
-    @abstractmethod
-    def spatial_shape(self):
-        pass
-
-    @property
-    @abstractmethod
-    def roi(self):
-        pass
-
-    @property
-    @abstractmethod
     def axes(self):
-        pass
+        """
+        Every array in dacapo is expected to have labelled axes.
 
-    @property
-    @abstractmethod
-    def num_channels(self):
-        pass
-
-    @property
-    @abstractmethod
-    def num_samples(self):
-        pass
-
-    @property
-    @abstractmethod
-    def num_classes(self):
-        pass
-
-    @property
-    @abstractmethod
-    def background_label(self):
+        Reserved labels:
+            "c": Channel dimension
+            "s": Sample dimension
+        """
         pass
 
     @abstractmethod
-    def get_source(self):
+    def get_source(self, *output_keys: ArrayKey):
+        """
+        A dacapo dataset is expected to provide a gunpowder tree that
+        provides the given output keys.
+        """
         pass
 
 
@@ -82,21 +46,9 @@ class GraphDataset(ABC):
     or graph can be requested.
     """
 
-    @property
     @abstractmethod
-    def spatial_dims(self):
+    def get_source(self, *output_keys: GraphKey):
         pass
 
-    @property
-    @abstractmethod
-    def roi(self):
-        pass
 
-    @property
-    @abstractmethod
-    def axes(self):
-        pass
-
-    @abstractmethod
-    def get_source(self):
-        pass
+Dataset = Union(ArrayDataset, GraphDataset)
